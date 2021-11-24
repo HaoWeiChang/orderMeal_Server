@@ -1,24 +1,21 @@
-import express from "express";
-import mysql2 from "mysql2";
-import dotenv from "dotenv";
-const routes = require('./routes');
-dotenv.config();
+const express = require('express')
+const bodyParser = require('body-parser')
+const userRoutes = require('./routes/userRoutes')
+const jwt = require('jsonwebtoken')
 const app = express();
-const mysql = mysql2;
 
-const connectSql = mysql.createConnection({
-    host: process.env.sqlhost,
-    user: process.env.sqluser,
-    database: process.env.sqldatabase,
-    port: process.env.sqlport,
-    password: process.env.sqlpassword
-})
+require('dotenv').config()
 
 
-app.get('/', function (req, res) {
+app.use(bodyParser.json());
+
+
+app.use('/api/user', userRoutes);
+
+
+
+app.get('/', (req, res) => {
     res.send('APP server is working')
-})
+});
 
-app.use('/api',routes)
-
-app.listen(3000)
+app.listen(3000);
