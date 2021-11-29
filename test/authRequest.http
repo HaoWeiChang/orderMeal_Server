@@ -1,13 +1,14 @@
-GET http://localhost:3000/api/user/userInfo
+GET http://localhost:3000/api/user/account
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaG93YXJkIiwiaWF0IjoxNjM3ODU4MTUzLCJleHAiOjE2Mzc4NTgyMTN9.Yh-FQMaY3DXjpFsCzNq3DU9-ZUG9bJA4MpxMeafPlK8
 ###
 
-POST http://localhost:3000/api/auth/login
+POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-    "username":"howard",
-    "password":"howard3318"
+    "email":"123@gmail.com",
+    "pwd":"test12",
+    "name":"Haowei"
 }
 
 ###

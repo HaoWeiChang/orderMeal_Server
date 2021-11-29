@@ -6,11 +6,6 @@ require('dotenv').config()
 
 let refreshTokens = []
 
-const register = async (req, res) => {
-  const userEmail = req.body.userEmail
-  const hashPassword = bcrypt.hashSync(req.body.userPassword, 10)
-}
-
 const login = (req, res) => {
   const username = req.body.username
   const user = {

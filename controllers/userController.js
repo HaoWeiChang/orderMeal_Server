@@ -1,17 +1,22 @@
 const express = require('express')
-require('dotenv').config()
+const { User } = require('../models/User')
 
-const posts = [
-  {
-    username: 'howard',
-    title: 'test',
-  },
-]
-
-const user = (req, res) => {
-  res.json(posts.filter((post) => post.username === req.user.name))
+exports.register = async (req, res, next) => {
+  try {
+    let { email, pwd, name } = req.body
+    let user = new User(email, pwd, name)
+    let [checkEmailregister, _] = await User.is_Email_register(email)
+    if (checkEmailregister[0] != null) {
+      return res.send('Email was register')
+    }
+    user = await user.register()
+    res.status(201).json({ message: 'register success' })
+  } catch (error) {
+    console.log(error)
+    next(error)
+  }
 }
 
-module.exports = {
-  user,
+exports.getAlluser = async (req, res, next) => {
+  res.send('you see the Alluser')
 }
