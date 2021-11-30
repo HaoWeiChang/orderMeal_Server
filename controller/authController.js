@@ -6,7 +6,7 @@ require('dotenv').config()
 
 let refreshTokens = []
 
-const login = (req, res) => {
+exports.Login = (req, res) => {
   const username = req.body.username
   const user = {
     name: username,
@@ -24,7 +24,7 @@ const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' })
 }
 
-const authenticateToken = (req, res, next) => {
+exports.authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   if (token == null) return res.sendStatus(401)
@@ -36,7 +36,7 @@ const authenticateToken = (req, res, next) => {
   })
 }
 
-const takeToken = (req, res) => {
+exports.takeToken = (req, res) => {
   const refreshToken = req.body.token
   if (refreshToken == null) return res.sendStatus(401)
   if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403)
@@ -47,15 +47,7 @@ const takeToken = (req, res) => {
   })
 }
 
-const logout = (req, res) => {
+exports.Logout = (req, res) => {
   refreshTokens = refreshTokens.filter((token) => token != req.body.token)
   res.sendStatus(204)
-}
-
-module.exports = {
-  login,
-  generateAccessToken,
-  authenticateToken,
-  takeToken,
-  logout,
 }

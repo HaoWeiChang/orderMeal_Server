@@ -29,11 +29,13 @@ class User {
     )`
     return db.execute(sql)
   }
-
   static is_Email_register(email) {
-    let sql = `select email from user
-    where email ='${email}'`
-    return db.execute(sql)
+    let sql = `select 1 from user
+    where email =?`
+    return db.execute(sql, [email]).then(([result, field]) => {
+      return result[0]
+    })
   }
 }
+
 module.exports = { User }

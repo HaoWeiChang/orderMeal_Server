@@ -6,7 +6,7 @@ POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-    "email":"123@gmail.com",
+    "email":"1234@gmail.com",
     "pwd":"test12",
     "name":"Haowei"
 }

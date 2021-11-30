@@ -1,9 +1,9 @@
 const express = require('express')
-const { login, takeToken, logout } = require('../controllers/authController')
+const { Login, takeToken, Logout } = require('../controller/authController')
 const router = express.Router()
 
-router.post('/login', login)
+router.post('/login', Login)
 router.post('/token', takeToken)
-router.delete('/logout', logout)
+router.delete('/logout', Logout)
 
 module.exports = router

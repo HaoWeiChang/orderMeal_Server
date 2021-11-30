@@ -1,12 +1,12 @@
 const express = require('express')
-const { User } = require('../models/User')
+const { User } = require('../service/User')
 
 exports.register = async (req, res, next) => {
   try {
     let { email, pwd, name } = req.body
     let user = new User(email, pwd, name)
-    let [checkEmailregister, _] = await User.is_Email_register(email)
-    if (checkEmailregister[0] != null) {
+    let checkEmailregister = await User.is_Email_register(email)
+    if (checkEmailregister != null) {
       return res.send('Email was register')
     }
     user = await user.register()
