@@ -29,12 +29,24 @@ class Store {
   }
   async Delete() {}
 }
-class Category {}
 class Meal {
-  constructor({ store, name, price, category }) {
+  constructor({ name, price, store_id }) {
     this.name = name
     this.price = price
-    this.category = category
+    this.store_id = store_id
+  }
+  async Create() {
+    let sql = `insert into meal(
+      name,
+      price,
+      store_id
+    )
+    values(
+      '${this.name}',
+      ${this.price},
+      ${this.store_id}
+    )`
+    return db.execute(sql)
   }
 }
 
@@ -44,4 +56,4 @@ const FindStore = async ({ name, phone }) => {
   if (phone) condition = ``
   let sql = `select *`
 }
-module.exports = { Store }
+module.exports = { Store, Meal }

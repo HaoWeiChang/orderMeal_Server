@@ -1,9 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { CreateStore } = require('../controller/storeController')
+const { CreateStore, CreateMeal } = require('../controller/storeController')
 
 router.route('/').post(CreateStore).get().delete()
 
-router.route('/meal')
+router.route('/meal').post(CreateMeal)
 
 module.exports = router

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const userRoutes = require('./routes/userRoutes')
 const authRoutes = require('./routes/authRoutes')
 const storeRoutes = require('./routes/storeRoutes')
+const activityRoutes = require('./routes/activityRoutes')
 const session = require('express-session')
 const MySQLstore = require('express-mysql-session')(session)
 const app = express()
@@ -24,6 +25,7 @@ app.use(
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/store', storeRoutes)
+app.use('/api/activity', activityRoutes)
 
 app.get('/', (req, res) => {
   res.send('APP server is working')

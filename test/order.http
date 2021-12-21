@@ -1,0 +1,7 @@
+###
+POST http://localhost:3000/api/store/
+Content-Type: application/json
+
+{
+  user
+}
