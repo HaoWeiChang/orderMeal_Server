@@ -7,6 +7,6 @@ const {
 
 router.route('/').post(CreateActivity)
 
-router.route('/order').post(CreateOrders)
+router.route('/order').post(CreateOrders).delete()
 
 module.exports = router

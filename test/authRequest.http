@@ -1,18 +1,21 @@
-GET http://localhost:3000/api/user/account
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaG93YXJkIiwiaWF0IjoxNjM3ODU4MTUzLCJleHAiOjE2Mzc4NTgyMTN9.Yh-FQMaY3DXjpFsCzNq3DU9-ZUG9bJA4MpxMeafPlK8
-###
-
 #註冊
 POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-    "email":"1234@gmail.com",
-    "pwd":"test12",
-    "name":"Haowei",
-    "studentID":"110368003"
+    "email":"test@gmail.com",
+    "password":"test12",
+    "name":"Haowei"
 }
 
+###登入
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+    "email":"1234@gmail.com",
+    "password":"test12"
+}
 
 
 ###
@@ -25,7 +28,4 @@ Content-Type: application/json
 
 ###
 DELETE  http://localhost:3000/api/auth/logout
-
-{
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaG93YXJkIiwiaWF0IjoxNjM3ODU4MTUzfQ.wTh0J2tf_nnb0r0fpcHKCH4R1O55E4iYmwzt37qJbvg"
-}
+Content-Type: :application/json

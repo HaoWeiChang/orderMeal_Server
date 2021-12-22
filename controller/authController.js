@@ -1,25 +1,24 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
-const session = require('express-session')
 const bcrypt = require('bcrypt')
+const db = require('../mysql/db')
 require('dotenv').config()
 
-let refreshTokens = []
-
-exports.Login = (req, res) => {
-  const username = req.body.username
-  const user = {
-    name: username,
+exports.Login = async (req, res) => {
+  try {
+    const { email, password } = req.body
+    let sql = `select * from account where email='${email}'`
+    const verify = await db.execute(sql).then((result) => {
+      return result[0]
+    })
+    if (!bcrypt.compareSync(password, verify[0].password))
+      res.status(401).json({ message: '密碼錯誤' })
+    req.session.id = verify[0].id
+    res.status(201).json({ message: '登入成功' })
+  } catch (error) {
+    console.log(error)
   }
-  const accessToken = generateAccessToken(user)
-  const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-  refreshTokens.push(refreshToken)
-  res.json({
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-  })
 }
-
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' })
 }
@@ -48,6 +47,12 @@ exports.takeToken = (req, res) => {
 }
 
 exports.Logout = (req, res) => {
-  refreshTokens = refreshTokens.filter((token) => token != req.body.token)
-  res.sendStatus(204)
+  try {
+    req.session.destroy((err) => {
+      throw new Error('登出失敗')
+    })
+    res.status(203).json({ message: '登出成功' })
+  } catch (error) {
+    console.log(error)
+  }
 }

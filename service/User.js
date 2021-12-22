@@ -1,9 +1,9 @@
 const db = require('../mysql/db.js')
 const bcrypt = require('bcrypt')
 class account {
-  constructor({ email, pwd, name, studentID }) {
+  constructor({ email, password, name, studentID }) {
     this.email = email
-    this.pwd = bcrypt.hashSync(pwd, 10)
+    this.password = bcrypt.hashSync(password, 10)
     this.name = name
     this.studentID = studentID
   }
@@ -20,13 +20,13 @@ class account {
       email,
       password,
       createTime,
-      valid
+      name
     )
     values(
       '${this.email}',
-      '${this.pwd}',
+      '${this.password}',
       '${createTime}',
-      ${true}
+      '${this.name}'
     )`
     return db.execute(sql)
   }

@@ -14,26 +14,45 @@ class Activity {
       store_id,
       creator,
       createtime,
-      endtime,
+      endtime
     )
     values(
-      ${this.subject}
-      ${this.store_id}
-      ${this.creator}
-      ${this.createtime}
-      ${this.endtime}
+      '${this.subject}',
+      ${this.store_id},
+      ${this.creator},
+      '${this.createtime}',
+      '${this.endtime}'
     )`
     return await db.execute(sql)
   }
   async Update() {}
   async delete() {}
 }
-const OrderMeal = async (meals) => {
-  let sql = `insert into activity(
+
+class OrderMeal {
+  constructor({ meals, orderer, activity }) {
+    this.meals = meals
+    this.orderer = orderer
+    this.activity = activity
+  }
+  async Create() {
+    let sqlvalues = []
+    this.meals.forEach((e) => {
+      sqlvalues.push([e.meal, e.price, e.num, this.orderer, this.activity])
+    })
+    let sql = `insert into ordermeal(
       meal,
       price,
+      num,
       orderer,
       activity
     )values ?`
-  return await db.execute(sql, meals)
+    return await db.query(sql, [sqlvalues])
+  }
+  static async Delete({ orderer, id }) {
+    let sql = `DELETE FROM ordermeal where orderer = ? AND id=?`
+    return await db.execute(sql, [orderer, id])
+  }
 }
+
+module.exports = { Activity, OrderMeal }
