@@ -3,9 +3,9 @@ POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-    "email":"test@gmail.com",
-    "password":"test12",
-    "name":"Haowei"
+    "email":"1@gmail.com",
+    "password":"1",
+    "name":"1"
 }
 
 ###登入
@@ -17,15 +17,6 @@ Content-Type: application/json
     "password":"test12"
 }
 
-
-###
-POST http://localhost:3000/api/auth/token
-Content-Type: application/json
-
-{
-    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaG93YXJkIiwiaWF0IjoxNjM3ODU4MTUzfQ.wTh0J2tf_nnb0r0fpcHKCH4R1O55E4iYmwzt37qJbvg"
-}
-
-###
+###登出
 DELETE  http://localhost:3000/api/auth/logout
 Content-Type: :application/json
