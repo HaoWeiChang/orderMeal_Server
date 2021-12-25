@@ -14,6 +14,7 @@ require("dotenv").config();
 
 let sessionStore = new MySQLstore(
   {
+    expiration: 5 * 60 * 1000,
     checkExpirationInterval: 60 * 60 * 1000,
     clearExpired: true,
   },
