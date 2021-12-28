@@ -1,12 +1,19 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const { Auth_Session } = require("../middleware/auth");
+const router = express.Router();
 const {
   CreateActivity,
   CreateOrders,
-} = require('../controller/activityController')
+  GetActivity,
+} = require("../controller/activityController");
 
-router.route('/').post(CreateActivity)
+router
+  .route("/")
+  .all(Auth_Session)
+  .post(CreateActivity)
+  .get(GetActivity)
+  .delete();
 
-router.route('/order').post(CreateOrders).delete()
-
-module.exports = router
+router.route("/order").all(Auth_Session).post(CreateOrders).get().delete();
+//router.route("/order").get();
+module.exports = router;

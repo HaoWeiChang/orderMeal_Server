@@ -1,8 +1,7 @@
 const express = require("express");
+const { Auth_Session } = require("../middleware/auth");
 const { Login, Logout } = require("../controller/authController");
 const router = express.Router();
 
-router.post("/login", Login);
-router.delete("/logout", Logout);
-
+router.route("/Login").post(Login).delete(Logout);
 module.exports = router;

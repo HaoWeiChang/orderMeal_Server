@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const db = require("../mysql/db");
 require("dotenv").config();
 
-exports.Login = async (req, res, next) => {
+exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
     let sql = `select * from account where email='${email}'`;
@@ -21,7 +21,7 @@ exports.Login = async (req, res, next) => {
       isLogin: true,
     });
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 
