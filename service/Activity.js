@@ -66,7 +66,7 @@ const GetActivityfunc = async () => {
   a.createtime,
   a.endtime
   From account As u 
-  Join (Select * From activity Where valid = ? And Isdelete = false)as a 
+  Join (Select * From activity Where valid = ? And Isdelete = false) as a 
     ON a.creator = u.id
   Join (Select * From store Where valid = True) as s
     ON s.id = a.store_id`;

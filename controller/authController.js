@@ -36,8 +36,13 @@ exports.Logout = async (req, res) => {
 };
 exports.LoginState = (req, res) => {
   if (!req.session.data) {
-    res.status(200).json({ loginState: false });
+    res.status(200).json({ isLogin: false });
     return;
   }
-  res.status(200).json({ loginState: true });
+  const user = {};
+  res.status(200).json({
+    isLogin: true,
+    id: req.session.data.id,
+    name: req.session.data.name,
+  });
 };
