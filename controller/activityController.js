@@ -13,8 +13,8 @@ exports.CreateActivity = async (req, res, next) => {
 };
 exports.GetActivity = async (req, res) => {
   try {
-    const result = await GetActivityfunc();
-    res.json(result);
+    const response = await GetActivityfunc();
+    res.json({ result: response });
   } catch (error) {
     console.log(error);
     return error;

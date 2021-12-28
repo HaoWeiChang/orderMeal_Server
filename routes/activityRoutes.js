@@ -7,12 +7,8 @@ const {
   GetActivity,
 } = require("../controller/activityController");
 
-router
-  .route("/")
-  .all(Auth_Session)
-  .post(CreateActivity)
-  .get(GetActivity)
-  .delete();
+router.route("/").get(GetActivity);
+router.route("/").all(Auth_Session).post(CreateActivity).delete();
 
 router.route("/order").all(Auth_Session).post(CreateOrders).get().delete();
 //router.route("/order").get();

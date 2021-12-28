@@ -8,6 +8,11 @@ Content-Type: application/json
     "name":"1"
 }
 
+###
+GET http://localhost:3000/api/auth/valid
+Content-Type: :application/json
+
+
 ###登入
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
@@ -20,3 +25,4 @@ Content-Type: application/json
 ###登出
 DELETE  http://localhost:3000/api/auth/logout
 Content-Type: :application/json
+

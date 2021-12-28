@@ -1,7 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const db = require("../mysql/db");
-require("dotenv").config();
 
 exports.Login = async (req, res) => {
   try {
@@ -34,4 +33,11 @@ exports.Logout = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+exports.LoginState = (req, res) => {
+  if (!req.session.data) {
+    res.status(200).json({ loginState: false });
+    return;
+  }
+  res.status(200).json({ loginState: true });
 };

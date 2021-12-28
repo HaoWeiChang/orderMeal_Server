@@ -1,4 +1,3 @@
-const { GetActivity } = require("../controller/activityController");
 const db = require("../mysql/db");
 
 class Activity {
@@ -57,8 +56,21 @@ class OrderMeal {
 }
 
 const GetActivityfunc = async () => {
-  let sql = `select * from activity `;
-  return await db.execute(sql).then(([result, field]) => {
+  let sql = `Select 
+  a.id,
+  a.subject,
+  a.store_id as storeID,
+  s.name as storeName,
+  a.creator as userID,
+  u.name as creator,
+  a.createtime,
+  a.endtime
+  From account As u 
+  Join (Select * From activity Where valid = ? And Isdelete = false)as a 
+    ON a.creator = u.id
+  Join (Select * From store Where valid = True) as s
+    ON s.id = a.store_id`;
+  return await db.execute(sql, [true]).then(([result, field]) => {
     return result;
   });
 };
