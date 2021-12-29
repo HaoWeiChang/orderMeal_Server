@@ -1,5 +1,6 @@
 const express = require("express");
-const { Store, Meal } = require("../service/Store");
+const res = require("express/lib/response");
+const { Store, Meal, GetStoreList } = require("../service/Store");
 
 exports.CreateStore = async (req, res, next) => {
   try {
@@ -9,6 +10,14 @@ exports.CreateStore = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(error);
+  }
+};
+exports.GetStoreList = async (req, res) => {
+  try {
+    const storeList = await GetStoreList();
+    res.status(200).json({ result: storeList });
+  } catch (error) {
+    return error;
   }
 };
 
