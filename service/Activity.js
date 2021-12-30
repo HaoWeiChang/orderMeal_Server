@@ -1,10 +1,10 @@
 const db = require("../mysql/db");
 
 class Activity {
-  constructor({ subject, store_id, user_id, createtime, endtime }) {
+  constructor({ id }, { subject, store_id, createtime, endtime }) {
     this.subject = subject;
     this.store_id = store_id;
-    this.creator = user_id;
+    this.creator = id;
     this.createtime = createtime;
     this.endtime = endtime;
   }
@@ -26,7 +26,17 @@ class Activity {
     return await db.execute(sql);
   }
   async Update() {}
-  async delete() {}
+  static async Delete({ id }, activityID) {
+    let sql = `UPDATE activity
+      Set Isdelete = TRUE 
+      WHERE creator = ?  AND id = ? AND Isdelete =FALSE`;
+    return await db
+      .execute(sql, [id, activityID])
+      .then(([result]) => {
+        return result.changedRows;
+      })
+      .catch((error) => error);
+  }
 }
 
 class OrderMeal {
@@ -70,9 +80,7 @@ const GetActivityfunc = async () => {
     ON a.creator = u.id
   Join (Select * From store Where valid = True) as s
     ON s.id = a.store_id`;
-  return await db.execute(sql, [true]).then(([result, field]) => {
-    return result;
-  });
+  return await db.execute(sql, [true]).then(([result]) => result);
 };
 
 module.exports = { Activity, OrderMeal, GetActivityfunc };
