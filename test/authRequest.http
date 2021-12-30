@@ -5,7 +5,7 @@ Content-Type: application/json
 {
     "email":"2@gmail.com",
     "password":"2",
-    "name":"2"
+    "name":"張浩維"
 }
 
 ###
@@ -23,6 +23,6 @@ Content-Type: application/json
 }
 
 ###登出
-DELETE  http://localhost:3000/api/auth/logout
+DELETE  http://localhost:3000/api/auth/login
 Content-Type: :application/json
 

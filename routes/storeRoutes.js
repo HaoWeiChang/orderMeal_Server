@@ -7,8 +7,12 @@ const {
   GetStoreList,
 } = require("../controller/storeController");
 
-router.route("/").get(GetStoreList);
-router.route("/").all(Auth_Session).post(CreateStore).get().delete();
+router
+  .route("/")
+  .all(Auth_Session)
+  .post(CreateStore)
+  .get(GetStoreList)
+  .delete();
 
 router.route("/meal").post(CreateMeal);
 
