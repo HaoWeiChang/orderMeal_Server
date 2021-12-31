@@ -4,7 +4,7 @@ class Activity {
   constructor({ id }, { subject, store_id, createtime, endtime }) {
     this.subject = subject;
     this.store_id = store_id;
-    this.creator = id;
+    this.user_id = id;
     this.createtime = createtime;
     this.endtime = endtime;
   }
@@ -12,24 +12,24 @@ class Activity {
     let sql = `insert into activity(
       subject,
       store_id,
-      creator,
+      user_id,
       createtime,
       endtime
     )
     values(
       '${this.subject}',
       ${this.store_id},
-      ${this.creator},
+      ${this.user_id},
       '${this.createtime}',
       '${this.endtime}'
     )`;
-    return await db.execute(sql);
+    return await db.execute(sql).then(([result]) => result.insertId);
   }
   async Update() {}
   static async Delete({ id }, activityID) {
     let sql = `UPDATE activity
       Set Isdelete = TRUE 
-      WHERE creator = ?  AND id = ? AND Isdelete =FALSE`;
+      WHERE user_id = ?  AND id = ? AND Isdelete =FALSE`;
     return await db
       .execute(sql, [id, activityID])
       .then(([result]) => {
@@ -69,17 +69,18 @@ const GetActivityfunc = async () => {
   let sql = `Select 
   a.id,
   a.subject,
-  a.store_id as storeID,
+  a.store_id,
   s.name as storeName,
-  a.creator as userID,
-  u.name as creator,
+  a.user_id,
+  u.name as initiator,
   a.createtime,
   a.endtime
   From account As u 
-  Join (Select * From activity Where valid = ? And Isdelete = false) as a 
-    ON a.creator = u.id
-  Join (Select * From store Where valid = True) as s
-    ON s.id = a.store_id`;
+  Join (Select * From activity Where valid = ? And Isdelete = false) As a 
+    ON a.user_id = u.id
+  Join (Select * From store Where valid = True) As s
+    ON s.id = a.store_id
+  Order by a.createtime DESC, a.endtime`;
   return await db.execute(sql, [true]).then(([result]) => result);
 };
 
