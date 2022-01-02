@@ -3,11 +3,13 @@ const { Activity, OrderMeal, GetActivityfunc } = require("../service/Activity");
 exports.CreateActivity = async (req, res, next) => {
   try {
     let activity = new Activity(req.session.data, req.body);
-    console.log(activity);
-    const response = await activity.Create();
-    res
-      .status(201)
-      .json({ message: `Create ${req.body.subject}`, activityID: response });
+    const activityID = await activity.Create();
+    res.status(201).json({
+      message: `Create ${req.body.subject}`,
+      result: {
+        activityID,
+      },
+    });
   } catch (error) {
     console.log(error);
     next(error);

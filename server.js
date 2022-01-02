@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const storeRoutes = require("./routes/storeRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const MySQLstore = require("express-mysql-session")(session);
+const resTimes = require("./middleware/resTime");
 const app = express();
 
 require("dotenv").config();
@@ -34,6 +35,7 @@ app.use(
     store: sessionStore,
     cookie: {
       maxAge: 60 * 60 * 1000,
+      sameSite: true,
     },
   })
 );
@@ -41,6 +43,7 @@ app.use(
 //use middleware
 app.use(cors(corsoptions));
 app.use(bodyParser.json());
+// app.use(resTimes());
 
 //set use api host
 app.use("/api/user", userRoutes);

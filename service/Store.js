@@ -28,6 +28,17 @@ class Store {
     return db.execute(sql);
   }
   async Delete() {}
+
+  static async GetList() {
+    let sql = `Select id,name,phone,address From store Where valid = True`;
+    return await db.execute(sql).then(([result]) => result);
+  }
+
+  static async Get(id) {
+    let sql = `select id, name, phone,address from store
+    where id = ? AND valid = ?`;
+    return await db.execute(sql, [id, true]).then(([result]) => result[0]);
+  }
 }
 class Meal {
   constructor({ name, price, store_id }) {
@@ -48,10 +59,10 @@ class Meal {
     )`;
     return db.execute(sql);
   }
+  static async Get(store_id) {
+    let sql = `select * from meal where store_id=?`;
+    return await db.execute(sql, [store_id]).then(([result]) => result);
+  }
 }
-const GetStoreList = async () => {
-  let sql = `Select id,name,phone,address From store Where valid = True`;
-  return await db.execute(sql).then(([result]) => result);
-};
 
-module.exports = { Store, Meal, GetStoreList };
+module.exports = { Store, Meal };

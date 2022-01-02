@@ -5,8 +5,11 @@ const {
   CreateStore,
   CreateMeal,
   GetStoreList,
+  GetStore,
+  GetMeal,
 } = require("../controller/storeController");
 
+/* 商店相關 */
 router
   .route("/")
   .all(Auth_Session)
@@ -14,6 +17,10 @@ router
   .get(GetStoreList)
   .delete();
 
-router.route("/meal").post(CreateMeal);
+router.route("/:id").all(Auth_Session).get(GetStore);
+
+/* 食物相關 */
+router.route("/meal").all(Auth_Session).post(CreateMeal);
+router.route("/meal/:id").all(Auth_Session).get(GetMeal);
 
 module.exports = router;

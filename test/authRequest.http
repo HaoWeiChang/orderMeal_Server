@@ -3,9 +3,9 @@ POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-    "email":"2@gmail.com",
-    "password":"2",
-    "name":"張浩維"
+    "email":"admin",
+    "password":"password",
+    "name":"Menager"
 }
 
 ###

@@ -12,12 +12,21 @@ Content-Type: application/json
 GET  http://localhost:3000/api/store/
 Content-Type: application/json
 
+
+###
+GET  http://localhost:3000/api/store/1
+Content-Type: application/json
+
 ###
 POST http://localhost:3000/api/store/meal
 Content-Type: application/json
 
 {
-    "name":"韭菜水餃",
-    "price":12,
+    "name":"玉米濃湯",
+    "price":30,
     "store_id":1
 }
+
+###
+GET  http://localhost:3000/api/store/meal/1
+Content-Type: application/json
