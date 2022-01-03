@@ -8,9 +8,9 @@ exports.Login = async (req, res) => {
     const verify = await db.execute(sql).then((result) => {
       return result[0];
     });
-    if (verify == 0) return res.status(401).json({ message: "Email Invalid" });
+    if (verify == 0) return res.status(200).json({ message: "Email Invalid" });
     if (!bcrypt.compareSync(password, verify[0].password))
-      return res.status(401).json({ message: "Password Invalid" });
+      return res.status(200).json({ message: "Password Invalid" });
     req.session.data = { id: verify[0].id, name: verify[0].name };
     res.status(201).json({
       message: "登入成功",
