@@ -10,12 +10,7 @@ const {
 } = require("../controller/storeController");
 
 /* 商店相關 */
-router
-  .route("/")
-  .all(Auth_Session)
-  .post(CreateStore)
-  .get(GetStoreList)
-  .delete();
+router.route("").all(Auth_Session).post(CreateStore).get(GetStoreList).delete();
 
 router.route("/:id").all(Auth_Session).get(GetStore);
 

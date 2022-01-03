@@ -10,16 +10,16 @@ exports.CreateStore = async (req, res, next) => {
     next(error);
   }
 };
-exports.GetStoreList = (req, res) => {
+exports.GetStoreList = async (req, res) => {
   try {
-    const storeList = Store.GetList();
+    const storeList = await Store.GetList();
     res.status(200).json({ result: storeList });
   } catch (error) {
     return error;
   }
 };
-exports.GetStore = (req, res) => {
-  const store = Store.Get(req.params.id);
+exports.GetStore = async (req, res) => {
+  const store = await Store.Get(req.params.id);
   res.status(200).json({ result: store });
 };
 

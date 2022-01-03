@@ -37,6 +37,32 @@ class Activity {
       })
       .catch((error) => error);
   }
+  static async GetList() {
+    let sql = `Select 
+      a.id,
+      a.subject,
+      a.store_id,
+      s.name as storeName,
+      a.user_id,
+      u.name as initiator,
+      a.createtime,
+      a.endtime
+      From account As u 
+      Join (Select * From activity Where valid = ? And Isdelete = false) As a 
+        ON a.user_id = u.id
+      Join (Select * From store Where valid = True) As s
+        ON s.id = a.store_id
+      Order by a.createtime DESC, a.endtime`;
+    return await db.execute(sql, [true]).then(([result]) => result);
+  }
+  static async Get(activityID) {
+    if (activityID == undefined) return Promise.reject("activityID不能為空值");
+    let sql = `select * from activity 
+      where id=? And valid =?`;
+    return await db
+      .execute(sql, [activityID, true])
+      .then(([result]) => result[0]);
+  }
 }
 
 class OrderMeal {
@@ -65,23 +91,7 @@ class OrderMeal {
   }
 }
 
-const GetActivityfunc = async () => {
-  let sql = `Select 
-  a.id,
-  a.subject,
-  a.store_id,
-  s.name as storeName,
-  a.user_id,
-  u.name as initiator,
-  a.createtime,
-  a.endtime
-  From account As u 
-  Join (Select * From activity Where valid = ? And Isdelete = false) As a 
-    ON a.user_id = u.id
-  Join (Select * From store Where valid = True) As s
-    ON s.id = a.store_id
-  Order by a.createtime DESC, a.endtime`;
-  return await db.execute(sql, [true]).then(([result]) => result);
+module.exports = {
+  Activity,
+  OrderMeal,
 };
-
-module.exports = { Activity, OrderMeal, GetActivityfunc };

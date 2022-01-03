@@ -4,7 +4,7 @@ const resTimes = () => {
     var calResponseTime = () => {
       var now = new Date();
       var deltaTime = now - req._startTime;
-      console.log(deltaTime + "ms");
+      console.log(`${req.originalUrl}: ${deltaTime} + ms`);
     };
     res.once("finish", calResponseTime);
     res.once("close", calResponseTime);

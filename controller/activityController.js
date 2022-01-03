@@ -1,4 +1,4 @@
-const { Activity, OrderMeal, GetActivityfunc } = require("../service/Activity");
+const { Activity, OrderMeal } = require("../service/Activity");
 
 exports.CreateActivity = async (req, res, next) => {
   try {
@@ -17,7 +17,17 @@ exports.CreateActivity = async (req, res, next) => {
 };
 exports.GetActivity = async (req, res) => {
   try {
-    const response = await GetActivityfunc();
+    const activity = await Activity.Get(req.params.id);
+    res.status(200).json({ result: activity });
+  } catch (error) {
+    res.status(500).json(error);
+    return error;
+  }
+};
+
+exports.GetActivityList = async (req, res) => {
+  try {
+    const response = await Activity.GetList();
     res.json({ result: response });
   } catch (error) {
     console.log(error);

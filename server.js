@@ -15,9 +15,9 @@ require("dotenv").config();
 
 let sessionStore = new MySQLstore(
   {
-    expiration: 5 * 60 * 1000,
-    checkExpirationInterval: 60 * 60 * 1000,
-    clearExpired: true,
+    // expiration: 5 * 60 * 1000,
+    // checkExpirationInterval: 60 * 60 * 1000,
+    // clearExpired: true,
   },
   db
 );
@@ -43,7 +43,7 @@ app.use(
 //use middleware
 app.use(cors(corsoptions));
 app.use(bodyParser.json());
-// app.use(resTimes());
+app.use(resTimes());
 
 //set use api host
 app.use("/api/user", userRoutes);
