@@ -53,6 +53,10 @@ exports.DeleteActivity = async (req, res) => {
 exports.CreateOrders = async (req, res, next) => {
   try {
     let order = new OrderMeal(req.body);
+    const history = await OrderMeal.GetHistory(req.body);
+    if (history === 0) {
+      order.CreateHistory();
+    }
     order = await order.Create();
     res.status(201).json({ message: "添加成功" });
   } catch (error) {

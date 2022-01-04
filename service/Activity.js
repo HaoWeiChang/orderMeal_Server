@@ -50,12 +50,12 @@ class Activity {
       a.createtime,
       a.endtime
       From account As u 
-      Join (Select * From activity Where valid = ? And Isdelete = false And endtime >?) As a 
+      Join (Select * From activity Where Isdelete = false And endtime >?) As a 
         ON a.user_id = u.id
       Join (Select * From store Where valid = True) As s
         ON s.id = a.store_id
       Order by a.createtime DESC, a.endtime`;
-    return await db.execute(sql, [true, date]).then(([result]) => result);
+    return await db.execute(sql, [date]).then(([result]) => result);
   }
   static async Get(activityID) {
     if (activityID == undefined) return Promise.reject("activityID不能為空值");
@@ -68,28 +68,43 @@ class Activity {
 }
 
 class OrderMeal {
-  constructor({ meals, orderer, activity }) {
+  constructor({ meals, user_id, activity_id }) {
     this.meals = meals;
-    this.orderer = orderer;
-    this.activity = activity;
+    this.user_id = user_id;
+    this.activity_id = activity_id;
   }
   async Create() {
     let sqlvalues = [];
     this.meals.forEach((e) => {
-      sqlvalues.push([e.meal, e.price, e.num, this.orderer, this.activity]);
+      sqlvalues.push([e.id, e.num, this.user_id, this.activity_id]);
     });
     let sql = `insert into ordermeal(
-      meal,
-      price,
+      meal_id,
       num,
-      orderer,
-      activity
+      user_id,
+      activity_id
     )values ?`;
     return await db.query(sql, [sqlvalues]);
   }
-  static async Delete({ orderer, id }) {
-    let sql = `DELETE FROM ordermeal where orderer = ? AND id=?`;
-    return await db.execute(sql, [orderer, id]);
+  async CreateHistory() {
+    let sql = `Insert Into orderhistory(
+      user_id,
+      activity_id
+    )values(
+      ${this.user_id},
+      ${this.activity_id}
+    )`;
+    db.execute(sql);
+  }
+  static async Delete({ user_id, id }) {
+    let sql = `DELETE FROM ordermeal where user_id = ? AND id=?`;
+    return await db.execute(sql, [user_id, id]);
+  }
+  static async GetHistory({ user_id, activity_id }) {
+    let sql = `Select 1 From orderhistory where user_id = ? AND activity_id=?`;
+    return await db
+      .execute(sql, [user_id, activity_id])
+      .then(([result]) => result.length);
   }
 }
 

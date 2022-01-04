@@ -27,27 +27,41 @@ CREATE TABLE activity (
     id INT NOT NULL AUTO_INCREMENT,
     subject VARCHAR(255) NOT NULL,
     store_id INT NOT NULL,
-    creator INT NOT NULL,
-    creatactivityactivityetime DATETIME NOT NULL,
+    user_id INT NOT NULL,
+    createtime DATETIME NOT NULL,
     endtime DATETIME NOT NULL,
     valid BOOLEAN DEFAULT 1,
     Isdelete BOOLEAN DEFAULT 1,
     PRIMARY KEY (id),
     FOREIGN KEY (store_id)
         REFERENCES store (id),
-    FOREIGN KEY (creator)
+    FOREIGN KEY (user_id)
         REFERENCES account (id)
 );
 CREATE TABLE ordermeal (
     id INT NOT NULL AUTO_INCREMENT,
-    meal VARCHAR(255) NOT NULL,
-    price INT NOT NULL,
+    meal_id INT NOT NULL,
     num INT NOT NULL DEFAULT 1,
-    orderer INT NOT NULL,
-    activity INT NOT NULL,
+    user_id INT NOT NULL,
+    activity_id INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (orderer)
+    FOREIGN KEY (meal_id)
+        REFERENCES meal (id),
+    FOREIGN KEY (user_id)
         REFERENCES account (id),
-    FOREIGN KEY (activity)
+    FOREIGN KEY (activity_id)
         REFERENCES activity (id)
+);
+CREATE TABLE orderhistory (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    activity_id INT NOT NULL,
+    store_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id)
+        REFERENCES account (id),
+    FOREIGN KEY (activity_id)
+        REFERENCES activity (id),
+    FOREIGN KEY (store_id)
+        REFERENCES store (id)
 );
