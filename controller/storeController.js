@@ -39,6 +39,5 @@ exports.GetMeal = async (req, res) => {
   const GetMeal = Meal.Get(req.params.id);
   const store = await Getstore;
   const meal = await GetMeal;
-
   res.status(200).json({ result: { store, meal } });
 };

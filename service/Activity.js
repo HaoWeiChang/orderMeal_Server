@@ -38,6 +38,8 @@ class Activity {
       .catch((error) => error);
   }
   static async GetList() {
+    const date = new Date();
+    date.toString();
     let sql = `Select 
       a.id,
       a.subject,
@@ -48,12 +50,12 @@ class Activity {
       a.createtime,
       a.endtime
       From account As u 
-      Join (Select * From activity Where valid = ? And Isdelete = false) As a 
+      Join (Select * From activity Where valid = ? And Isdelete = false And endtime >?) As a 
         ON a.user_id = u.id
       Join (Select * From store Where valid = True) As s
         ON s.id = a.store_id
       Order by a.createtime DESC, a.endtime`;
-    return await db.execute(sql, [true]).then(([result]) => result);
+    return await db.execute(sql, [true, date]).then(([result]) => result);
   }
   static async Get(activityID) {
     if (activityID == undefined) return Promise.reject("activityID不能為空值");
