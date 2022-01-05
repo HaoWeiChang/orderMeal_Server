@@ -1,4 +1,5 @@
 const db = require("../mysql/db");
+const date_fns = require("date-fns");
 
 class Activity {
   constructor({ id }, { subject, store_id, createtime, endtime }) {
@@ -73,28 +74,33 @@ class OrderMeal {
     this.user_id = user_id;
     this.activity_id = activity_id;
   }
-  async Create() {
+  async Create(historyID) {
     let sqlvalues = [];
     this.meals.forEach((e) => {
-      sqlvalues.push([e.id, e.num, this.user_id, this.activity_id]);
+      sqlvalues.push([e.id, e.num, this.user_id, this.activity_id, historyID]);
     });
     let sql = `insert into ordermeal(
       meal_id,
       num,
       user_id,
-      activity_id
+      activity_id,
+      history_id
     )values ?`;
     return await db.query(sql, [sqlvalues]);
   }
   async CreateHistory() {
+    const now = date_fns.format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
+    console.log(now);
     let sql = `Insert Into orderhistory(
       user_id,
-      activity_id
+      activity_id,
+      createtime
     )values(
       ${this.user_id},
-      ${this.activity_id}
+      ${this.activity_id},
+      '${now}'
     )`;
-    db.execute(sql);
+    return await db.execute(sql).then(([result]) => result.insertId);
   }
   static async Delete({ user_id, id }) {
     let sql = `DELETE FROM ordermeal where user_id = ? AND id=?`;

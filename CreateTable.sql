@@ -44,11 +44,14 @@ CREATE TABLE ordermeal (
     num INT NOT NULL DEFAULT 1,
     user_id INT NOT NULL,
     activity_id INT NOT NULL,
+    history_id INT NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (meal_id)
         REFERENCES meal (id),
     FOREIGN KEY (user_id)
         REFERENCES account (id),
+    FOREIGN KEY (history_id)
+        REFERENCES orderhistory (id),
     FOREIGN KEY (activity_id)
         REFERENCES activity (id)
 );

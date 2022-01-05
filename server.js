@@ -22,8 +22,9 @@ let sessionStore = new MySQLstore(
   db
 );
 let corsoptions = {
-  origin: "http://localhost:8080",
+  origin: ["http://140.124.73.173:8080", "http://localhost:8080"],
   credentials: true,
+  optionsSuccessStatus: 204,
 };
 
 app.use(
