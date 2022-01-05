@@ -3,9 +3,9 @@ POST http://localhost:3000/api/user/account
 Content-Type: application/json
 
 {
-	"email":"admin",
-	"password":"admin",
-	"name":"Menager"
+	"email":"test",
+	"password":"tese",
+	"name":"teset"
 }
 
 ###

@@ -1,11 +1,10 @@
 const db = require("../mysql/db.js");
 const bcrypt = require("bcrypt");
 class account {
-  constructor({ email, password, name, studentID }) {
+  constructor({ email, password, name }) {
     this.email = email;
     this.password = bcrypt.hashSync(password, 10);
     this.name = name;
-    this.studentID = studentID;
   }
   async register() {
     let d = new Date();
