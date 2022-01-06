@@ -8,7 +8,7 @@ const pool = mysql.createPool({
   database: process.env.sqldatabase,
   port: process.env.sqlport,
   password: process.env.sqlpassword,
-  timezone: "utc",
+  timezone: "+08:00",
 });
 
 module.exports = pool.promise();

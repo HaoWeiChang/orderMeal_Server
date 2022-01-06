@@ -35,6 +35,15 @@ exports.GetActivityList = async (req, res) => {
   }
 };
 
+exports.GetHistory = async (req, res) => {
+  try {
+    const response = await Activity.GetHistory(req.session.data.id);
+    res.status(200).json({ result: response });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 exports.DeleteActivity = async (req, res) => {
   try {
     const response = await Activity.Delete(

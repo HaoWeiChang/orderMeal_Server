@@ -41,7 +41,7 @@ class Activity {
   static async GetList() {
     const date = new Date();
     date.toString();
-    let sql = `Select 
+    let sql = `Select
       a.id,
       a.subject,
       a.store_id,
@@ -50,8 +50,8 @@ class Activity {
       u.name as initiator,
       a.createtime,
       a.endtime
-      From account As u 
-      Join (Select * From activity Where Isdelete = false And endtime >?) As a 
+      From account As u
+      Join (Select * From activity Where Isdelete = false And endtime >?) As a
         ON a.user_id = u.id
       Join (Select * From store Where valid = True) As s
         ON s.id = a.store_id
@@ -65,6 +65,24 @@ class Activity {
     return await db
       .execute(sql, [activityID, true])
       .then(([result]) => result[0]);
+  }
+  static async GetHistory(user_id) {
+    let sql = `Select
+      h.id as historyID,
+      a.subject,
+      u.name as userName,
+      s.name as storeName,
+      h.user_id as historyUserID,
+      h.createTime
+      From activity as a
+      Left Join (Select id,name From store) as s
+      On a.store_id = s. id 
+      Join (Select id,name From account) as u
+      On a.user_id = u.id
+      Join (Select id,createtime,user_id,activity_id From orderhistory Where user_id = ?) as h
+      On a.id = h.activity_id
+      Order by h.createTime DESC;`;
+    return await db.execute(sql, [user_id]).then(([result]) => result);
   }
 }
 
