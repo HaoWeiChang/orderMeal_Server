@@ -84,6 +84,24 @@ class Activity {
       Order by h.createTime DESC;`;
     return await db.execute(sql, [user_id]).then(([result]) => result);
   }
+  static async GetContent(activityID) {
+    let sql = `select 
+      om.history_id,
+      u.id as user_id,
+      u.name as userName,
+      GROUP_CONCAT(m.name) as mealName,
+      GROUP_CONCAT(m.note) as mealNote,
+      GROUP_CONCAT(m.price) as mealPrice,
+      GROUP_CONCAT(om.num) as orderNum,
+      SUM(m.price*om.num) as total
+      From meal as m
+      INNER Join (select * from ordermeal) as om
+      ON m.id = om.meal_id AND activity_id = ?
+      INNER Join (select * from account) as u
+      ON u.id = om.user_id
+      Group by om.history_id,u.id;`;
+    return await db.execute(sql, [activityID]).then(([result]) => result);
+  }
 }
 
 class OrderMeal {

@@ -15,6 +15,7 @@ exports.CreateActivity = async (req, res, next) => {
     next(error);
   }
 };
+
 exports.GetActivity = async (req, res) => {
   try {
     const activity = await Activity.Get(req.params.id);
@@ -31,6 +32,16 @@ exports.GetActivityList = async (req, res) => {
     res.json({ result: response });
   } catch (error) {
     console.log(error);
+    return error;
+  }
+};
+
+exports.GetActivityContent = async (req, res) => {
+  try {
+    const activity = await Activity.GetContent(req.params.id);
+    res.status(200).json({ result: activity });
+  } catch (error) {
+    res.status(500).json(error);
     return error;
   }
 };

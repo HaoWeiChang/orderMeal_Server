@@ -17,6 +17,11 @@ Content-Type: application/json
 GET http://localhost:3000/api/activity/1
 Content-Type: application/json
 
+###
+GET http://localhost:3000/api/activity/96/content
+Content-Type: application/json
+
+
 
 ###
 DELETE  http://localhost:3000/api/activity/?activityID=8

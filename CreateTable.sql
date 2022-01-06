@@ -38,6 +38,17 @@ CREATE TABLE activity (
     FOREIGN KEY (user_id)
         REFERENCES account (id)
 );
+CREATE TABLE orderhistory (
+    id INT NOT NULL AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    activity_id INT NOT NULL,
+    createtime DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id)
+        REFERENCES account (id),
+    FOREIGN KEY (activity_id)
+        REFERENCES activity (id)
+);
 CREATE TABLE ordermeal (
     id INT NOT NULL AUTO_INCREMENT,
     meal_id INT NOT NULL,
@@ -54,17 +65,4 @@ CREATE TABLE ordermeal (
         REFERENCES orderhistory (id),
     FOREIGN KEY (activity_id)
         REFERENCES activity (id)
-);
-CREATE TABLE orderhistory (
-    id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    activity_id INT NOT NULL,
-    store_id INT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (user_id)
-        REFERENCES account (id),
-    FOREIGN KEY (activity_id)
-        REFERENCES activity (id),
-    FOREIGN KEY (store_id)
-        REFERENCES store (id)
 );
