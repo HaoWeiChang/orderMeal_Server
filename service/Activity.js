@@ -38,7 +38,7 @@ class Activity {
       })
       .catch((error) => error);
   }
-  static async GetList() {
+  static async GetList(userID) {
     const date = new Date();
     date.toString();
     let sql = `Select
@@ -49,14 +49,18 @@ class Activity {
       a.user_id,
       u.name as initiator,
       a.createtime,
-      a.endtime
+      a.endtime,
+      h.id as historyID
       From account As u
-      Join (Select * From activity Where Isdelete = false And endtime >?) As a
-        ON a.user_id = u.id
+      Join (Select * From activity) As a
+      ON a.user_id = u.id AND a.endtime > ? AND a.Isdelete =false
+      left Join (select * From orderhistory) as h
+      on a.id = h.activity_id AND h.user_id = ?
       Join (Select * From store Where valid = True) As s
-        ON s.id = a.store_id
+      ON s.id = a.store_id
+      Group by a.id
       Order by a.createtime DESC, a.endtime`;
-    return await db.execute(sql, [date]).then(([result]) => result);
+    return await db.execute(sql, [date, userID]).then(([result]) => result);
   }
   static async Get(activityID) {
     if (activityID == undefined) return Promise.reject("activityID不能為空值");
@@ -86,20 +90,19 @@ class Activity {
   }
   static async GetContent(activityID) {
     let sql = `select 
-      om.history_id,
       u.id as user_id,
       u.name as userName,
       GROUP_CONCAT(m.name) as mealName,
       GROUP_CONCAT(m.note) as mealNote,
       GROUP_CONCAT(m.price) as mealPrice,
       GROUP_CONCAT(om.num) as orderNum,
-      SUM(m.price*om.num) as total
+      CAST(SUM(m.price*om.num) as UNSIGNED) as needpay
       From meal as m
       INNER Join (select * from ordermeal) as om
       ON m.id = om.meal_id AND activity_id = ?
       INNER Join (select * from account) as u
       ON u.id = om.user_id
-      Group by om.history_id,u.id;`;
+      Group by u.id`;
     return await db.execute(sql, [activityID]).then(([result]) => result);
   }
 }

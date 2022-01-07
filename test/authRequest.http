@@ -18,8 +18,8 @@ POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-	"email":"admin",
-	"password":"admin"
+	"email":"1@gmail.com",
+	"password":"1"
 }
 
 ###登出

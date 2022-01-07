@@ -28,7 +28,8 @@ exports.GetActivity = async (req, res) => {
 
 exports.GetActivityList = async (req, res) => {
   try {
-    const response = await Activity.GetList();
+    const userID = req.session.data !== undefined ? req.session.data : null;
+    const response = await Activity.GetList(userID);
     res.json({ result: response });
   } catch (error) {
     console.log(error);
@@ -39,7 +40,27 @@ exports.GetActivityList = async (req, res) => {
 exports.GetActivityContent = async (req, res) => {
   try {
     const activity = await Activity.GetContent(req.params.id);
-    res.status(200).json({ result: activity });
+    let totalpay = 0;
+    const _activity = activity.map((item) => {
+      const mealName = item.mealName.split(",");
+      const mealPrice = item.mealPrice.split(",");
+      const mealNote = item.mealNote.split(",");
+      let meal = [];
+      totalpay += item.needpay;
+      mealName.forEach((value, index) => {
+        meal.push({
+          name: mealName[index],
+          price: mealPrice[index],
+          note: (mealNote[index] = null ? "" : mealNote[index]),
+        });
+      });
+      return {
+        userName: item.userName,
+        meal,
+        needPay: item.neadpay,
+      };
+    });
+    res.status(200).json({ result: { totalpay, activity: _activity } });
   } catch (error) {
     res.status(500).json(error);
     return error;
