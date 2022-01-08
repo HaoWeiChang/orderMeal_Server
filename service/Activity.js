@@ -39,9 +39,7 @@ class Activity {
       .catch((error) => error);
   }
   static async GetList(userID = null) {
-    const date = new Date().toISOString();
-    console.log(date);
-    console.log(userID);
+    const date = new Date();
     let sql = `Select
       a.id,
       a.subject,
@@ -54,7 +52,7 @@ class Activity {
       h.id as historyID
       From account As u
       Join (Select * From activity) As a
-      ON a.user_id = u.id AND a.endtime > ? AND a.Isdelete =false
+      ON a.user_id = u.id AND a.endtime > ? AND a.Isdelete = false AND a.valid = false
       left Join (select * From orderhistory) as h
       on a.id = h.activity_id AND h.user_id = ?
       Join (Select * From store Where valid = True) As s
@@ -68,7 +66,7 @@ class Activity {
     let sql = `select * from activity 
       where id=? And valid =?`;
     return await db
-      .execute(sql, [activityID, true])
+      .execute(sql, [activityID, false])
       .then(([result]) => result[0]);
   }
   static async GetHistory(user_id) {
@@ -79,7 +77,8 @@ class Activity {
       u.name as userName,
       s.name as storeName,
       h.user_id as historyUserID,
-      h.createTime
+      h.createTime,
+      a.valid as activityValid
       From activity as a
       Left Join (Select id,name From store) as s
       On a.store_id = s. id 
@@ -87,7 +86,7 @@ class Activity {
       On a.user_id = u.id
       Join (Select id,createtime,user_id,activity_id From orderhistory Where user_id = ?) as h
       On a.id = h.activity_id
-      Order by h.createTime DESC;`;
+      Order by h.createTime DESC`;
     return await db.execute(sql, [user_id]).then(([result]) => result);
   }
   static async GetContent(activityID) {

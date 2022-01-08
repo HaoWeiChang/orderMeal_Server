@@ -46,7 +46,7 @@ Join (Select * From activity) As a
 ON a.user_id = u.id AND a.endtime >'2022/1/4' AND a.Isdelete =false
 left Join (select * From orderhistory) as h
 on a.id = h.activity_id AND h.user_id = ""
-Join (Select * From store Where valid = True) As s
+Join (Select * From store Where valid = false) As s
 ON s.id = a.store_id
 Group by a.id
 Order by a.createtime DESC, a.endtime;

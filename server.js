@@ -13,14 +13,7 @@ const app = express();
 
 require("dotenv").config();
 
-let sessionStore = new MySQLstore(
-  {
-    // expiration: 5 * 60 * 1000,
-    // checkExpirationInterval: 60 * 60 * 1000,
-    // clearExpired: true,
-  },
-  db
-);
+let sessionStore = new MySQLstore({}, db);
 let corsoptions = {
   origin: ["http://140.124.73.173:8080", "http://localhost:8080"],
   credentials: true,
@@ -35,7 +28,7 @@ app.use(
     resave: false,
     store: sessionStore,
     cookie: {
-      maxAge: 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
       sameSite: true,
     },
   })
