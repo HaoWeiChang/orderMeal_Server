@@ -38,9 +38,10 @@ class Activity {
       })
       .catch((error) => error);
   }
-  static async GetList(userID) {
-    const date = new Date();
-    date.toString();
+  static async GetList(userID = null) {
+    const date = new Date().toISOString();
+    console.log(date);
+    console.log(userID);
     let sql = `Select
       a.id,
       a.subject,
@@ -73,6 +74,7 @@ class Activity {
   static async GetHistory(user_id) {
     let sql = `Select
       h.id as historyID,
+      h.activity_id as activityID,
       a.subject,
       u.name as userName,
       s.name as storeName,

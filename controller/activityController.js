@@ -28,7 +28,7 @@ exports.GetActivity = async (req, res) => {
 
 exports.GetActivityList = async (req, res) => {
   try {
-    const userID = req.session.data !== undefined ? req.session.data : null;
+    const userID = req.session.data !== undefined ? req.session.data.id : null;
     const response = await Activity.GetList(userID);
     res.json({ result: response });
   } catch (error) {
@@ -40,27 +40,29 @@ exports.GetActivityList = async (req, res) => {
 exports.GetActivityContent = async (req, res) => {
   try {
     const activity = await Activity.GetContent(req.params.id);
-    let totalpay = 0;
+    let totalPay = 0;
     const _activity = activity.map((item) => {
       const mealName = item.mealName.split(",");
       const mealPrice = item.mealPrice.split(",");
       const mealNote = item.mealNote.split(",");
+      const orderNum = item.orderNum.split(",");
       let meal = [];
-      totalpay += item.needpay;
+      totalPay += item.needpay;
       mealName.forEach((value, index) => {
         meal.push({
           name: mealName[index],
           price: mealPrice[index],
           note: (mealNote[index] = null ? "" : mealNote[index]),
+          num: orderNum[index],
         });
       });
       return {
         userName: item.userName,
         meal,
-        needPay: item.neadpay,
+        needPay: item.needpay,
       };
     });
-    res.status(200).json({ result: { totalpay, activity: _activity } });
+    res.status(200).json({ result: { totalPay, activity: _activity } });
   } catch (error) {
     res.status(500).json(error);
     return error;
