@@ -14,7 +14,7 @@ const {
 router.route("").get(GetActivityList);
 router.route("").all(Auth_Session).post(CreateActivity).delete(DeleteActivity);
 
-router.route("/:id").all(Auth_Session).get(GetActivity);
+router.route("/:id").all(Auth_Session).get(GetActivity).patch();
 router.route("/:id/content").all(Auth_Session).get(GetActivityContent);
 router.route("/order").all(Auth_Session).post(CreateOrders).get().delete();
 router.route("/history/order").all(Auth_Session).get(GetHistory);

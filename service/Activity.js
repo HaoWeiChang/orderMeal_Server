@@ -41,7 +41,6 @@ class Activity {
   static async GetList(userID = null) {
     const date = new Date();
     let sql = `Select
-      a.id,
       a.subject,
       a.store_id,
       s.name as storeName,
@@ -49,16 +48,18 @@ class Activity {
       u.name as initiator,
       a.createtime,
       a.endtime,
-      h.id as historyID
+      h.id as historyID,
+      a.id
       From account As u
       Join (Select * From activity) As a
-      ON a.user_id = u.id AND a.endtime > ? AND a.Isdelete = false AND a.valid = false
+      ON a.user_id = u.id AND a.endtime > ? 
+      AND a.Isdelete = false AND a.valid = false
       left Join (select * From orderhistory) as h
-      on a.id = h.activity_id AND h.user_id = ?
-      Join (Select * From store Where valid = True) As s
-      ON s.id = a.store_id
-      Group by a.id
-      Order by a.createtime DESC, a.endtime`;
+      ON a.id = h.activity_id AND h.user_id = ?
+      Join (Select * From store) As s
+      ON s.id = a.store_id AND s.valid =True
+      Group by a.id,h.id
+      Order by a.endtime`;
     return await db.execute(sql, [date, userID]).then(([result]) => result);
   }
   static async Get(activityID) {
