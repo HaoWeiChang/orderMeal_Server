@@ -30,3 +30,7 @@ Content-Type: application/json
 ###
 Get  http://localhost:3000/api/activity/history/order
 Content-Type: application/json
+
+###
+Get  http://localhost:3000/api/activity/history
+Content-Type: application/json

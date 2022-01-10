@@ -7,6 +7,7 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const storeRoutes = require("./routes/storeRoutes");
 const activityRoutes = require("./routes/activityRoutes");
+const managerRoutes = require("./routes/managerRoutes");
 const MySQLstore = require("express-mysql-session")(session);
 const resTimes = require("./middleware/resTime");
 const app = express();
@@ -48,6 +49,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/store", storeRoutes);
 app.use("/api/activity", activityRoutes);
+app.use("/api/manager", managerRoutes);
 
 const PORT = process.env.PORT || 3000;
 

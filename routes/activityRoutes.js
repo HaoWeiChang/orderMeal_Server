@@ -3,19 +3,32 @@ const { Auth_Session } = require("../middleware/auth");
 const router = express.Router();
 const {
   CreateActivity,
-  CreateOrders,
   GetActivity,
   GetActivityList,
   GetActivityContent,
+  GetActivityHistory,
   DeleteActivity,
-  GetHistory,
+  validActivity,
+  CreateOrders,
+  GetOrderMealHistory,
+  DeleteOrders,
 } = require("../controller/activityController");
 
 router.route("").get(GetActivityList);
-router.route("").all(Auth_Session).post(CreateActivity).delete(DeleteActivity);
 
-router.route("/:id").all(Auth_Session).get(GetActivity).patch();
-router.route("/:id/content").all(Auth_Session).get(GetActivityContent);
-router.route("/order").all(Auth_Session).post(CreateOrders).get().delete();
-router.route("/history/order").all(Auth_Session).get(GetHistory);
+router.route("").all(Auth_Session).post(CreateActivity).delete(DeleteActivity);
+router
+  .route("/:id/content")
+  .all(Auth_Session)
+  .get(GetActivityContent)
+  .patch(validActivity);
+
+router.route("/history").all(Auth_Session).get(GetActivityHistory);
+router
+  .route("/order")
+  .all(Auth_Session)
+  .post(CreateOrders)
+  .delete(DeleteOrders);
+router.route("/history/order").all(Auth_Session).get(GetOrderMealHistory);
+router.route("/:id").all(Auth_Session).get(GetActivity);
 module.exports = router;

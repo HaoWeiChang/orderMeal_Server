@@ -26,13 +26,29 @@ class Activity {
     )`;
     return await db.execute(sql).then(([result]) => result.insertId);
   }
-  async Update() {}
+  static async Get(activityID) {
+    if (activityID == undefined) return Promise.reject("activityID不能為空值");
+    let sql = `select * from activity 
+      where id=?`;
+    return await db.execute(sql, [activityID]).then(([result]) => result[0]);
+  }
   static async Delete({ id }, activityID) {
     let sql = `UPDATE activity
       Set Isdelete = TRUE 
       WHERE user_id = ?  AND id = ? AND Isdelete =FALSE`;
     return await db
       .execute(sql, [id, activityID])
+      .then(([result]) => {
+        return result.changedRows;
+      })
+      .catch((error) => error);
+  }
+  static async valid({ id }, { activityID, valid }) {
+    let sql = `UPDATE activity
+      Set valid = ? 
+      WHERE user_id = ?  AND id = ? AND Isdelete =FALSE`;
+    return await db
+      .execute(sql, [valid, id, activityID])
       .then(([result]) => {
         return result.changedRows;
       })
@@ -62,32 +78,15 @@ class Activity {
       Order by a.endtime`;
     return await db.execute(sql, [date, userID]).then(([result]) => result);
   }
-  static async Get(activityID) {
-    if (activityID == undefined) return Promise.reject("activityID不能為空值");
-    let sql = `select * from activity 
-      where id=? And valid =?`;
-    return await db
-      .execute(sql, [activityID, false])
-      .then(([result]) => result[0]);
-  }
   static async GetHistory(user_id) {
-    let sql = `Select
-      h.id as historyID,
-      h.activity_id as activityID,
-      a.subject,
-      u.name as userName,
-      s.name as storeName,
-      h.user_id as historyUserID,
-      h.createTime,
-      a.valid as activityValid
-      From activity as a
-      Left Join (Select id,name From store) as s
-      On a.store_id = s. id 
-      Join (Select id,name From account) as u
-      On a.user_id = u.id
-      Join (Select id,createtime,user_id,activity_id From orderhistory Where user_id = ?) as h
-      On a.id = h.activity_id
-      Order by h.createTime DESC`;
+    let sql = `select 
+    a.*,
+    u.name as userName,
+    s.name as storeName 
+    From activity as a
+    Join(account as u,store as s)
+    ON  a.user_id = ? AND a.user_id = u.id AND a.store_id = s.id
+    Order by a.createTime desc`;
     return await db.execute(sql, [user_id]).then(([result]) => result);
   }
   static async GetContent(activityID) {
@@ -99,11 +98,13 @@ class Activity {
       GROUP_CONCAT(m.price) as mealPrice,
       GROUP_CONCAT(om.num) as orderNum,
       CAST(SUM(m.price*om.num) as UNSIGNED) as needpay
-      From meal as m
-      INNER Join (select * from ordermeal) as om
-      ON m.id = om.meal_id AND activity_id = ?
-      INNER Join (select * from account) as u
-      ON u.id = om.user_id
+      From orderhistory as oh
+      Join (select * from ordermeal) as om
+      ON oh.activity_id = ? AND oh.id = om.history_id AND oh.Isdelete = false
+      Join (select * from meal) as m 
+      ON m.id = om.meal_id
+      Join (select * from account) as u
+      ON u.id = oh.user_id
       Group by u.id`;
     return await db.execute(sql, [activityID]).then(([result]) => result);
   }
@@ -143,15 +144,31 @@ class OrderMeal {
     )`;
     return await db.execute(sql).then(([result]) => result.insertId);
   }
-  static async Delete({ user_id, id }) {
-    let sql = `DELETE FROM ordermeal where user_id = ? AND id=?`;
-    return await db.execute(sql, [user_id, id]);
+  static async GetHistory(user_id) {
+    let sql = `Select
+      h.id as historyID,
+      h.activity_id as activityID,
+      a.subject,
+      u.name as userName,
+      s.name as storeName,
+      h.user_id as historyUserID,
+      h.createTime,
+      h.Isdelete as historyDelete,
+      a.valid as activityValid,
+      a.Isdelete as activityDelete
+      From activity as a
+      Left Join (Select id,name From store) as s
+      On a.store_id = s. id 
+      Join (Select id,name From account) as u
+      On a.user_id = u.id
+      Join (Select id,createtime,user_id,activity_id,Isdelete From orderhistory) as h
+      On a.id = h.activity_id And h.user_id = ? AND h.Isdelete = false
+      Order by h.createTime DESC`;
+    return await db.execute(sql, [user_id]).then(([result]) => result);
   }
-  static async GetHistory({ user_id, activity_id }) {
-    let sql = `Select 1 From orderhistory where user_id = ? AND activity_id=?`;
-    return await db
-      .execute(sql, [user_id, activity_id])
-      .then(([result]) => result.length);
+  static async Delete({ id }, historyID) {
+    let sql = `Update orderhistory Set Isdelete = 1 where user_id = ? AND id=? AND Isdelete =false`;
+    return await db.execute(sql, [id, historyID]);
   }
 }
 

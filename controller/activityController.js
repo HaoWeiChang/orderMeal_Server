@@ -69,7 +69,7 @@ exports.GetActivityContent = async (req, res) => {
   }
 };
 
-exports.GetHistory = async (req, res) => {
+exports.GetActivityHistory = async (req, res) => {
   try {
     const response = await Activity.GetHistory(req.session.data.id);
     res.status(200).json({ result: response });
@@ -84,12 +84,28 @@ exports.DeleteActivity = async (req, res) => {
       req.session.data,
       req.query.activityID
     );
-    let result = {};
-    if (response !== 0) result.success = "成功刪除";
-    else result.error = "資料已經刪除";
-    res.status(200).json(result);
+    if (response !== 0) return res.status(204).json();
+    else throw Error("資料已經刪除");
   } catch (error) {
-    return error;
+    return res.status(404).json({ error });
+  }
+};
+
+exports.validActivity = async (req, res) => {
+  try {
+    const activityID = req.params.id;
+    const valid = req.body.valid;
+    if (!valid || !activityID) {
+      return res.status(400).json({ error: "request有錯誤" });
+    }
+    const response = await Activity.valid(req.session.data, {
+      activityID,
+      valid,
+    });
+    if (response === 0) throw Error("看似有不明原因錯誤");
+    res.status(200).json({ message: "成功" });
+  } catch (error) {
+    return res.status(404).json({ error });
   }
 };
 
@@ -106,8 +122,24 @@ exports.CreateOrders = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.GetOrderMealHistory = async (req, res) => {
+  try {
+    const response = await OrderMeal.GetHistory(req.session.data.id);
+    res.status(200).json({ result: response });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 exports.DeleteOrders = async (req, res, next) => {
   try {
+    const response = await OrderMeal.Delete(
+      req.session.data,
+      req.query.historyID
+    );
+    if (response !== 0) return res.status(204).json();
+    else throw Error("資料已經刪除");
   } catch (error) {
     console.log(error);
     next(error);
