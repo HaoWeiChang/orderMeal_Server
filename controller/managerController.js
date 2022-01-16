@@ -28,3 +28,13 @@ exports.GetUserList = async (req, res) => {
     return res.status(401).send(error);
   }
 };
+
+exports.SQLCommand = async (req, res) => {
+  try {
+    const sql = req.body.command;
+    const response = await db.execute(sql).then(([result]) => result);
+    req.status(200).json({ success: response });
+  } catch (error) {
+    res.status(200).json({ error: error.message });
+  }
+};

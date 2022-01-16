@@ -15,11 +15,11 @@ class account {
     let mins = d.getMinutes();
     let seconds = d.getSeconds();
     let createTime = `${yyyy}-${month}-${date} ${hours}:${mins}:${seconds}`;
-    let sql = `insert into account(
-      email,
-      password,
-      createTime,
-      name
+    let sql = `insert into user(
+      user_email,
+      user_password,
+      user_createtime,
+      user_name
     )
     values(
       '${this.email}',
@@ -29,10 +29,10 @@ class account {
     )`;
     return db.execute(sql);
   }
-  static is_Email_register(email) {
-    let sql = `select 1 from account
-    where email =? AND valid =?`;
-    return db.execute(sql, [email, true]).then(([result, field]) => {
+  static async is_Email_register(email) {
+    let sql = `select 1 from user
+    where user_email =? AND user_valid =?`;
+    return await db.execute(sql, [email, true]).then(([result]) => {
       return result[0];
     });
   }

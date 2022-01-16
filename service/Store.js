@@ -8,17 +8,17 @@ class Store {
   }
   async Create() {
     let sql = `select 1 from store
-    where name ='${this.name}' AND valid=${true}`;
-    let isStoreExist = await db.execute(sql).then(([result, field]) => {
+    where store_name ='${this.name}'`;
+    let isStoreExist = await db.execute(sql).then(([result]) => {
       return result[0];
     });
     if (isStoreExist != null) {
       throw `${this.name} has bean created`;
     }
     sql = `insert into store(
-        name,
-        phone,
-        address
+        store_name,
+        store_phone,
+        store_address
       )
       values(
         '${this.name}',
@@ -30,13 +30,23 @@ class Store {
   async Delete() {}
 
   static async GetList() {
-    let sql = `Select id,name,phone,address From store Where valid = True`;
+    let sql = `Select 
+    store_id as id,
+    store_name as name,
+    store_phone as phone,
+    store_address  as address 
+    From store Where store_valid = True`;
     return await db.execute(sql).then(([result]) => result);
   }
 
   static async Get(id) {
-    let sql = `select id, name, phone,address from store
-    where id = ? AND valid = ?`;
+    let sql = `select
+    store_id as id,
+    store_name as name,
+    store_phone as phone,
+    store_address  as address 
+    from store
+    where store_id = ? AND store_valid = ?`;
     return await db.execute(sql, [id, true]).then(([result]) => result[0]);
   }
 }
@@ -48,8 +58,8 @@ class Meal {
   }
   async Create() {
     let sql = `insert into meal(
-      name,
-      price,
+      meal_name,
+      meal_price,
       store_id
     )
     values(
@@ -60,7 +70,12 @@ class Meal {
     return db.execute(sql);
   }
   static async Get(store_id) {
-    let sql = `select * from meal where store_id=?`;
+    let sql = `select 
+    meal_id as id,
+    meal_name as name,
+    meal_price as price,
+    meal_note as note
+    from meal where store_id=?`;
     return await db.execute(sql, [store_id]).then(([result]) => result);
   }
 }
