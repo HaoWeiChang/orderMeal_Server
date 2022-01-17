@@ -11,5 +11,5 @@ router.all(Auth_Session);
 
 router.route("/userlist").get(GetUserList);
 router.route("/sqlcommand").post(SQLCommand);
-router.route("/storelist").get(GetStoreList);
+router.route("/storelist").get(GetStoreList).delete();
 module.exports = router;
