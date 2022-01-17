@@ -17,9 +17,10 @@ require("dotenv").config();
 let sessionStore = new MySQLstore({}, db);
 let corsoptions = {
   origin: [
-    "http://140.124.73.173:8080",
-    "http://localhost:8080",
     "http://123.193.90.36:8080",
+    "http://140.124.73.173:8080",
+    "http://140.124.73.219:8080",
+    "http://140.124.73.219:80",
   ],
   credentials: true,
   optionsSuccessStatus: 204,
@@ -42,7 +43,7 @@ app.use(
 //use middleware
 app.use(cors(corsoptions));
 app.use(bodyParser.json());
-app.use(resTimes());
+if (process.env.NODE_ENV == "production") app.use(resTimes());
 
 //set use api host
 app.use("/api/user", userRoutes);
