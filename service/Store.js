@@ -28,7 +28,6 @@ class Store {
     return db.execute(sql);
   }
   async Delete() {}
-
   static async GetList() {
     let sql = `Select 
     store_id as id,

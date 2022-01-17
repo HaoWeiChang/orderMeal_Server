@@ -1,10 +1,15 @@
 const express = require("express");
 const { Auth_Session } = require("../middleware/auth");
 const router = express.Router();
-const { GetUserList } = require("../controller/managerController");
+const {
+  GetUserList,
+  SQLCommand,
+  GetStoreList,
+} = require("../controller/managerController");
 
 router.all(Auth_Session);
 
-router.route("/userList").get(GetUserList);
-
+router.route("/userlist").get(GetUserList);
+router.route("/sqlcommand").post(SQLCommand);
+router.route("/storelist").get(GetStoreList);
 module.exports = router;

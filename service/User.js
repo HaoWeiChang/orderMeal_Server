@@ -27,7 +27,7 @@ class account {
       '${createTime}',
       '${this.name}'
     )`;
-    return db.execute(sql);
+    return await db.execute(sql);
   }
   static async is_Email_register(email) {
     let sql = `select 1 from user
