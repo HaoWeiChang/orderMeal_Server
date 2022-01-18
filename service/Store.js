@@ -25,9 +25,8 @@ class Store {
         '${this.phone}',
         '${this.address}'
       )`;
-    return db.execute(sql);
+    return await db.execute(sql).then(([result]) => result.insertId);
   }
-  async Delete() {}
   static async GetList() {
     let sql = `Select 
     store_id as id,
@@ -49,24 +48,23 @@ class Store {
     return await db.execute(sql, [id, true]).then(([result]) => result[0]);
   }
 }
+
 class Meal {
-  constructor({ name, price, store_id }) {
-    this.name = name;
-    this.price = price;
-    this.store_id = store_id;
+  constructor({ meals }) {
+    this.meals = meals;
   }
   async Create() {
+    let sqlvalues = [];
+    this.meals.forEach((e) => {
+      sqlvalues.push([e.name, e.price, e.note, e.store_id]);
+    });
     let sql = `insert into meal(
       meal_name,
       meal_price,
+      meal_note,
       store_id
-    )
-    values(
-      '${this.name}',
-      ${this.price},
-      ${this.store_id}
-    )`;
-    return db.execute(sql);
+    )values ?`;
+    return db.query(sql, [sqlvalues]);
   }
   static async Get(store_id) {
     let sql = `select 

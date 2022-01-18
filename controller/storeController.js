@@ -3,8 +3,10 @@ const { Store, Meal } = require("../service/Store");
 exports.CreateStore = async (req, res, next) => {
   try {
     let store = new Store(req.body);
-    store = await store.Create();
-    res.status(201).json({ message: `Create ${req.body.name}` });
+    const response = await store.Create();
+    res
+      .status(201)
+      .json({ message: `Create ${req.body.name}`, result: response });
   } catch (error) {
     console.log(error);
     next(error);

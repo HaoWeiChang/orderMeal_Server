@@ -13,3 +13,7 @@ Content-Type: application/json
 ###
 Get  http://localhost:3000/api/manager/storelist
 Content-Type: application/json
+
+###
+Get  http://localhost:3000/api/manager/meal/
+Content-Type: application/json

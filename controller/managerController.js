@@ -32,7 +32,7 @@ exports.GetStoreList = async (req, res) => {
     store.*,
     count(meal_name) as meal_number
     FROM store
-    join meal
+    left join meal
     on store.store_id = meal.store_id
     group by store.store_id`;
     const response = (await db.execute(sql))[0];
@@ -42,11 +42,37 @@ exports.GetStoreList = async (req, res) => {
   }
 };
 
-exports.DeleteStore = async (req, res) => {
+exports.SetStore = async (req, res) => {
   try {
-    const sql = `update store Set store_valid = 0 where `;
+    const sql = `update store 
+    Set store_valid = ${req.body.set}
+    where store_id =${req.body.store_id}`;
+    const response = (await db.execute(sql))[0];
+    res.status(201).json({ result: response });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.GetMeal = async (req, res) => {
+  try {
+    const sql = `select * from meal
+    where store_id =?`;
+    const response = (await db.execute(sql, [req.params.id]))[0];
+    res.status(201).json({ result: response });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.DeleteMeal = async (req, res) => {
+  try {
+    const sql = `Delete from meal where meal_id = ?`;
+    const response = (await db.execute(sql, [req.params.id]))[0];
+    res.status(204).json({ result: response });
+  } catch (error) {
+    console.log(error);
+    return error;
   }
 };
 
