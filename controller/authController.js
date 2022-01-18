@@ -4,10 +4,13 @@ const db = require("../mysql/db");
 exports.Login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    let sql = `select * from account where email='${email}'`;
-    const verify = await db.execute(sql).then((result) => {
-      return result[0];
-    });
+    let sql = `select 
+    user_id as id,
+    user_password as password,
+    user_email as email,
+    user_name as name
+    from user where user_email='${email}'`;
+    const verify = await db.execute(sql).then((result) => result[0]);
     if (verify == 0) return res.status(200).json({ message: "此信箱尚未註冊" });
     if (!bcrypt.compareSync(password, verify[0].password))
       return res.status(200).json({ message: "輸入密碼錯誤" });
