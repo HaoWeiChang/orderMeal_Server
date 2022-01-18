@@ -17,9 +17,9 @@ require("dotenv").config();
 let sessionStore = new MySQLstore({}, db);
 let corsoptions = {
   origin: [
+    "http://123.193.90.36:8080",
     "http://140.124.73.173:8080",
     "http://localhost:8080",
-    "http://123.193.90.36:8080",
   ],
   credentials: true,
   optionsSuccessStatus: 204,

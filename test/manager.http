@@ -1,3 +1,19 @@
 ###
 Get  http://localhost:3000/api/manager/userList
 Content-Type: application/json
+
+###
+POST   http://localhost:3000/api/manager/sqlcommand
+Content-Type: application/json
+
+{
+  "sql":"select * from user"
+}
+
+###
+Get  http://localhost:3000/api/manager/storelist
+Content-Type: application/json
+
+###
+Get  http://localhost:3000/api/manager/meal/
+Content-Type: application/json

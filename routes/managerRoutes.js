@@ -1,10 +1,28 @@
 const express = require("express");
-const { Auth_Session } = require("../middleware/auth");
+const { Manager_Auth_Sessiom } = require("../middleware/auth");
 const router = express.Router();
-const { GetUserList } = require("../controller/managerController");
+const {
+  GetUserList,
+  SQLCommand,
+  GetStoreList,
+  SetStore,
+  GetMeal,
+  DeleteMeal,
+} = require("../controller/managerController");
+const { CreateStore, CreateMeal } = require("../controller/storeController");
 
-router.all(Auth_Session);
-
-router.route("/userList").get(GetUserList);
-
+router.route("/userlist").all(Manager_Auth_Sessiom).get(GetUserList);
+router.route("/sqlcommand").all(Manager_Auth_Sessiom).post(SQLCommand);
+router
+  .route("/storelist")
+  .all(Manager_Auth_Sessiom)
+  .get(GetStoreList)
+  .post(SetStore);
+router.route("/store").all(Manager_Auth_Sessiom).post(CreateStore);
+router
+  .route("/meal/:id")
+  .all(Manager_Auth_Sessiom)
+  .post(CreateMeal)
+  .get(GetMeal)
+  .delete(DeleteMeal);
 module.exports = router;
