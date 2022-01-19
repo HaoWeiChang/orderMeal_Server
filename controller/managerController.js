@@ -3,7 +3,6 @@ const date_fns = require("date-fns");
 
 exports.GetUserList = async (req, res) => {
   try {
-    if (req.session.data.id !== 6) throw Error("非後臺帳號");
     const sql_user = `SELECT 
     *
     FROM user`;

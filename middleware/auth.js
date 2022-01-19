@@ -6,7 +6,7 @@ exports.Auth_Session = (req, res, next) => {
 };
 
 exports.Manager_Auth_Sessiom = (req, res, next) => {
-  const Manager_IDList = [6];
+  const Manager_IDList = [6, 48];
   const Session_Data = req.session.data;
   if (!Session_Data) {
     return res.status(403).json({ error: "憑證失效" });
